@@ -71,8 +71,8 @@ abstract class Message implements MessageInterface
 
     public function withBody(StreamInterface $body): self
     {
-        $request = clone $this;
-        $request->body = $body;
-        return $request;
+        $clone = clone $this;
+        $clone->body = $body;
+        return $clone;
     }
 }
