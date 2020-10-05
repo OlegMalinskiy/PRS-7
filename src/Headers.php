@@ -17,6 +17,15 @@ class Headers
     private array $normalizedMap = [];
 
     /**
+     * @param array $headers
+     * @param array $globals
+     */
+    final public function __construct(array $headers = [], ?array $globals = null)
+    {
+        $this->globals = $globals ?? $_SERVER;
+        $this->setHeaders($headers);
+    }
+    /**
      * @param string $name
      * @return bool
      */
@@ -91,6 +100,18 @@ class Headers
         if ($this instanceof Response) {
             header(sprintf('%s: %s', $name, $this->getHeaderLine($name)));
         }
+    }
+
+    /**
+     * @param array $headers
+     * @return $this
+     */
+    public function setHeaders(array $headers): self
+    {
+        foreach ($headers as $name => $value) {
+            $this->addHeader($name, $value);
+        }
+        return $this;
     }
 
     /**
@@ -185,5 +206,23 @@ class Headers
                 throw new InvalidArgumentException('Header values must be RFC 7230 compatible strings.');
             }
         }
+    }
+
+    /**
+     * @return static
+     */
+    public static function createFromGlobals(): self
+    {
+        $headers = null;
+
+        if (function_exists('getallheaders')) {
+            $headers = getallheaders();
+        }
+
+        if (!is_array($headers)) {
+            $headers = [];
+        }
+
+        return new static($headers);
     }
 }

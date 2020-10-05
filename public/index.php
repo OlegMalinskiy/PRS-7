@@ -1,8 +1,12 @@
 <?php
 
+use App\Headers;
 use App\Request;
 
 require '../vendor/autoload.php';
+
+$headers = Headers::createFromGlobals();
+print_r($headers);
 
 $request = (new Request())
     ->withHeader('Auth', 'Bearer Token')
