@@ -161,7 +161,7 @@ class Headers
      */
     protected function preprareValue($value): array
     {
-        return is_string($value) ? [trim($value)] : array_map(fn($item) => trim($item), $value);
+        return is_string($value) ? [trim($value)] : array_map('trim', $value);
     }
 
     /**
